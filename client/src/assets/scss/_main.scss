@@ -1,0 +1,68 @@
+html {box-sizing: border-box;}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+* {
+  margin:0;
+  padding:0;
+  max-height:1000000px;
+}
+ul, ol, dl, p, h1, h2, h3, h4, h5, h6, address, form, table, blockquote, applet, embed, object, iframe, frameset, mejs-container{margin:0 0 14px;}
+html, body, div, span, applet, embed, object, iframe, frameset,
+p, q, blockquote, sub, sup, a, abbr, acronym, font, img, small, center,
+h1, h2, h3, h4, h5, h6, b, strong, big, u, ins,
+i, cite, em, var, dfn, address, s, strike, del,
+dl, dt, dd, ol, ul, li, pre, code, kbd, samp, tt,
+fieldset, legend, form, label, table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure, footer, header,
+hgroup, menu, nav, section, summary, time, mark, audio,video{
+  border:0;
+}
+article, aside, details, figcaption, figure, footer, header, main, nav, section, summary {
+  display: block;
+}
+a {
+  text-decoration:underline;
+  color:#000;
+  outline:none;
+}
+a:hover {text-decoration:none;}
+img{
+  max-width: 100%;
+  height: auto;
+}
+video, iframe, object, embed{max-width: 100%;}
+input, textarea, select {
+  font:100% Arial, Helvetica, sans-serif;
+  vertical-align:middle;
+  color:#000;
+}
+textarea {
+  vertical-align: top;
+}
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+textarea{
+  background:#fff;
+  margin: 0;
+}
+label{vertical-align:middle;}
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  padding:0;
+  border:0;
+}
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  //-webkit-appearance: button;
+  cursor: pointer;
+}
+input[type="search"] {-webkit-appearance: none;}
+input[type="search"]::-webkit-search-cancel-button {-webkit-appearance: none;}
+input[type="search"]::-webkit-search-decoration {display:none;}
