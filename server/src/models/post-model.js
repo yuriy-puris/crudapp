@@ -1,15 +1,13 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-
 const PostSchema = new Schema({
-  title: {
+  firstName: {
     type: String,
     unique: true
   },
-  description: {
+  lastName: {
     type: String
   }
 })
-
-const PostModel = mongoose.model('posts', PostSchema)
+const PostModel = mongoose.model('userinfo', PostSchema)
 module.exports = PostModel

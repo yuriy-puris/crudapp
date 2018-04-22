@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import FirstView from '@/components/FirstView'
+import UserInfo from '@/components/UserInfo'
 
 Vue.use(Router)
 
@@ -11,6 +12,11 @@ export default new Router({
       path: '/',
       name: 'FirstView',
       component: FirstView
+    },
+    {
+      path: '/userinfo',
+      name: 'UserInfo',
+      component: UserInfo
     }
   ]
 })

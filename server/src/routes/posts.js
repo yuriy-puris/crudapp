@@ -4,12 +4,12 @@ const Post = require('../models/post-model')
 
 //create and write to database
 
-router.post('/posts', (req, res) => {
+router.post('/userinfo', (req, res) => {
 
   //create post
   const post = new Post({
-    title: req.body.title,
-    description: req.body.description
+    firstName: req.body.firstName,
+    lastName: req.body.lastName
   })
 
   //write post to database
@@ -27,9 +27,9 @@ router.post('/posts', (req, res) => {
 
 //read data in database
 
-router.get('/posts', (req, res) => {
+router.get('/userinfo', (req, res) => {
   //model Post and her method find and return method send, sort data
-  Post.find({}, 'title description', (err, posts) => {
+  Post.find({}, 'firstName lastName', (err, posts) => {
     if(err) {
       console.log(err)
     } else {

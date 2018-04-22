@@ -29,13 +29,19 @@
               <input type="text" v-model="signForm.signFirstName" class="form-control" placeholder="First name" required />
             </div>
             <div class="form-row">
-              <input type="text" class="form-control" placeholder="Last name" required />
+              <input type="text" v-model="signForm.signLastName" class="form-control" placeholder="Last name" required />
             </div>
             <div class="form-row">
-              <input type="password" class="form-control" placeholder="Password" required />
+              <input type="password" class="form-control" placeholder="Password" />
             </div>
             <div class="form-row">
-              <button type="submit" class="button button-block">Get Started</button>
+              <button
+                type="button"
+                class="button button-block"
+                @click="addNewUser()"
+                >
+                Get Started
+              </button>
             </div>
           </form>
         </div>
@@ -61,6 +67,8 @@
 </template>
 
 <script>
+import PostsService from '@/services/PostsService'
+
 export default {
   name: 'FirstView',
   data() {
@@ -80,6 +88,17 @@ export default {
   methods: {
     switchForm() {
       this.isVisible = !this.isVisible
+    },
+    async addNewUser() {
+      if( this.signForm.signFirstName !== '' && this.signForm.signLastName !== '' ) {
+        await PostsService.addNewPosts({
+          firstName: this.signForm.signFirstName,
+          lastName: this.signForm.signLastName
+        })
+        this.$router.push({name: 'UserInfo'})
+      } else {
+        console.log('Empty fields')
+      }
     }
   }
 }
