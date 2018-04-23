@@ -3,9 +3,9 @@
       <table>
         <thead>
           <tr>
-            <th>id</th>
-            <th>firstName</th>
-            <th>lastName</th>
+            <th>Id</th>
+            <th>UserName</th>
+            <th>UserEmail</th>
           </tr>
         </thead>
         <tbody>

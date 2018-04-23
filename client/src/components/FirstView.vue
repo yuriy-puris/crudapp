@@ -26,13 +26,13 @@
           <h1>Sign Up for Free</h1>
           <form action="/" method="post">
             <div class="form-row">
-              <input type="text" v-model="signForm.signFirstName" class="form-control" placeholder="First name" required />
+              <input type="text" v-model="signForm.signFirstName" class="form-control" placeholder="User name" required />
             </div>
             <div class="form-row">
-              <input type="text" v-model="signForm.signLastName" class="form-control" placeholder="Last name" required />
+              <input type="text" v-model="signForm.signUserEmail" class="form-control" placeholder="User email" required />
             </div>
             <div class="form-row">
-              <input type="password" class="form-control" placeholder="Password" />
+              <input type="password" v-model="signForm.signPassword" class="form-control" placeholder="Password" />
             </div>
             <div class="form-row">
               <button
@@ -75,12 +75,12 @@ export default {
     return {
       isVisible: true,
       signForm: {
-        signFirstName: '',
-        signLastName: '',
+        signUserName: '',
+        signUserEmail: '',
         signPassword: ''
       },
       loginForm: {
-        loginFirstName: '',
+        loginUserName: '',
         loginPassword: ''
       }
     }
@@ -90,10 +90,11 @@ export default {
       this.isVisible = !this.isVisible
     },
     async addNewUser() {
-      if( this.signForm.signFirstName !== '' && this.signForm.signLastName !== '' ) {
+      if( this.signForm.signFirstName !== '' && this.signForm.signUserEmail !== '' ) {
         await PostsService.addNewPosts({
           firstName: this.signForm.signFirstName,
-          lastName: this.signForm.signLastName
+          userEmail: this.signForm.signUserEmail,
+          password: this.signForm.signPassword
         })
         this.$router.push({name: 'UserInfo'})
       } else {

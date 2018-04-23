@@ -1,21 +1,21 @@
 const express = require('express')
 const router = express.Router()
-const Post = require('../models/post-model')
+const User = require('../models/post-model')
 
 //create and write to database
 
 router.post('/userinfo', (req, res) => {
-
   //create post
-  const post = new Post({
+  const post = new User({
     firstName: req.body.firstName,
-    lastName: req.body.lastName
+    userEmail: req.body.userEmail,
+    password: req.body.password
   })
 
   //write post to database
   post.save((err, data) => {
       if(err) {
-        console.log(err)
+        console.log('hi it si error')
       } else {
         res.send({
           success: true,
@@ -29,11 +29,11 @@ router.post('/userinfo', (req, res) => {
 
 router.get('/userinfo', (req, res) => {
   //model Post and her method find and return method send, sort data
-  Post.find({}, 'firstName lastName', (err, posts) => {
+  User.find({}, 'firstName userEmail', (err, users) => {
     if(err) {
       console.log(err)
     } else {
-      res.send({ posts: posts })
+      res.send({ users: users })
     }
   }).sort({ _id: -1})
 })
