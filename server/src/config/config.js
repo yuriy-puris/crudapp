@@ -3,3 +3,4 @@ module.exports = {
   dbURL: 'mongodb://localhost/articles',
   dbOptions: { useMongoClient: true }
 }
+

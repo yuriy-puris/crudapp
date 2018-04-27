@@ -6,5 +6,8 @@ export default {
   },
   addNewPosts (params) {
     return Api().post('userinfo', params)
+  },
+  loginUser (params) {
+    return Api().post('login', params)
   }
 }

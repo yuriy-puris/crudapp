@@ -50,13 +50,19 @@
           <h1>Welcome Back!</h1>
           <form action="/" method="post">
             <div class="form-row">
-              <input type="text" class="form-control" placeholder="First name" required />
+              <input type="text" v-model="loginForm.loginUserName" class="form-control" placeholder="First name" required />
             </div>
             <div class="form-row">
-              <input type="password" class="form-control" placeholder="Password" required />
+              <input type="password" v-model="loginForm.loginPassword" class="form-control" placeholder="Password" required />
             </div>
             <div class="form-row">
-              <button type="submit" class="button button-block">Log in</button>
+              <button
+                type="submit"
+                @click="loginUser()"
+                class="button button-block"
+              >
+                Log in
+              </button>
             </div>
           </form>
         </div>
@@ -97,6 +103,16 @@ export default {
           password: this.signForm.signPassword
         })
         this.$router.push({name: 'UserInfo'})
+      } else {
+        console.log('Empty fields')
+      }
+    },
+    async loginUser() {
+      if( this.loginForm.loginUserName !== '' && this.loginForm.loginPassword !== '' ) {
+        await PostsService.loginUser({
+          firstName: this.loginForm.loginUserName,
+          password: this.loginForm.loginPassword
+        })
       } else {
         console.log('Empty fields')
       }
