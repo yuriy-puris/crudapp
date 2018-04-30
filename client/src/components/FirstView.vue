@@ -57,7 +57,7 @@
             </div>
             <div class="form-row">
               <button
-                type="submit"
+                type="button"
                 @click="loginUser()"
                 class="button button-block"
               >
@@ -113,6 +113,7 @@ export default {
           firstName: this.loginForm.loginUserName,
           password: this.loginForm.loginPassword
         })
+        this.$router.push({name: 'UserInfo'})
       } else {
         console.log('Empty fields')
       }

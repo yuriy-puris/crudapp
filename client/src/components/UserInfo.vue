@@ -1,21 +1,6 @@
 <template>
-  <div class="user-list">
-      <table>
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>UserName</th>
-            <th>UserEmail</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, idx) in usersInfo">
-            <td v-for="(itm) in item">
-              {{itm}}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="user-holder">
+      <h1>Hello, {{userInfo.userName}}</h1>
   </div>
 </template>
 
@@ -26,14 +11,15 @@ export default {
   name: 'UserInfo',
   data() {
     return {
-      usersInfo: ''
+      userInfo: {
+        userName: ''
+      }
     }
   },
   methods: {
     async getUserInfo() {
-      const userList = await PostsService.fetchPosts()
-      this.usersInfo = userList.data.posts
-      console.log(userList.data.posts)
+      const user = await PostsService.fetchPosts()
+      this.userInfo.userName = user.data.firstName
     }
   },
   mounted() {
