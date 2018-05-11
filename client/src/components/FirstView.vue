@@ -5,7 +5,7 @@
       <ul class="tab-group">
         <li class="tab">
           <span
-            @click="switchForm()"
+            @click="switchSignForm()"
             v-bind:class="{active : (isVisible === true) }"
           >
             Sign Up
@@ -13,7 +13,7 @@
         </li>
         <li class="tab">
           <span
-            @click="switchForm()"
+            @click="switchLoginForm()"
             v-bind:class="{active : (isVisible === false) }"
           >
             Log In
@@ -92,8 +92,11 @@ export default {
     }
   },
   methods: {
-    switchForm() {
-      this.isVisible = !this.isVisible
+    switchSignForm() {
+      this.isVisible = true
+    },
+    switchLoginForm() {
+      this.isVisible = false
     },
     async addNewUser() {
       if( this.signForm.signFirstName !== '' && this.signForm.signUserEmail !== '' ) {
@@ -102,6 +105,7 @@ export default {
           userEmail: this.signForm.signUserEmail,
           password: this.signForm.signPassword
         })
+        console.log(this.loginForm.loginPassword)
         this.$router.push({name: 'UserInfo'})
       } else {
         console.log('Empty fields')
@@ -113,7 +117,7 @@ export default {
           firstName: this.loginForm.loginUserName,
           password: this.loginForm.loginPassword
         })
-        this.$router.push({name: 'UserInfo'})
+//        this.$router.push({name: 'UserInfo'})
       } else {
         console.log('Empty fields')
       }

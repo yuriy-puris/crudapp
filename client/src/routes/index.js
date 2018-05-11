@@ -14,7 +14,7 @@ export default new Router({
       component: FirstView
     },
     {
-      path: '/login',
+      path: '/login/:id',
       name: 'UserInfo',
       component: UserInfo
     }

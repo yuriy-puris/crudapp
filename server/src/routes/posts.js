@@ -2,8 +2,8 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/post-model')
 const bcrypt = require('bcrypt-nodejs')
-
-let sessionUser
+const session = require('express-session')
+const MongoStore = require('connect-mongo')(session)
 
 //create and write to database
 
@@ -22,7 +22,6 @@ router.post('/userinfo', (req, res) => {
       if(err) {
         console.log('hi it si error')
       } else {
-        let id = sessionUser._id
         res.send('signup successful')
       }
     })
@@ -42,12 +41,11 @@ router.post('/login', (req, res) => {
           userEmail: userData.userEmail,
           _id: userData._id
         }
-        sessionUser = req.session.user
         req.session.user.expires = new Date(
           Date.now() + 3 * 24 * 3600 * 1000
         )
-        console.log('You are logged in', req.session.user)
-        res.status(200).send({ user: req.session.user })
+        // res.status(200).send({ user: req.session.user })
+        res.redirect('login/' + req.session.user._id)
       } else {
         console.log('invaild login')
         res.send(401).send('incorrect password')
@@ -59,10 +57,14 @@ router.post('/login', (req, res) => {
   })
 })
 
-router.get('/login', (req, res, next) => {
-  let id = sessionUser._id
-  User.findById(id, (err, doc) => {
-    res.send(doc)
+router.get('/login/:id', (req, res, next) => {
+  let id = req.params.id
+  User.findById(id, (err, user) => {
+    if(err) {
+      console.log(err)
+    } else {
+      res.send({ user: user })
+    }
   })
 })
 
