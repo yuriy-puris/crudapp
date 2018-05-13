@@ -81,7 +81,7 @@ export default {
     return {
       isVisible: true,
       signForm: {
-        signUserName: '',
+        signFirstName: '',
         signUserEmail: '',
         signPassword: ''
       },
@@ -105,8 +105,9 @@ export default {
           userEmail: this.signForm.signUserEmail,
           password: this.signForm.signPassword
         })
-        console.log(this.loginForm.loginPassword)
-        this.$router.push({name: 'UserInfo'})
+        let user_id = this.signForm.signFirstName
+        console.log(user_id)
+        this.$router.push({ name: 'UserInfo', params: { id: user_id }})
       } else {
         console.log('Empty fields')
       }
@@ -117,11 +118,16 @@ export default {
           firstName: this.loginForm.loginUserName,
           password: this.loginForm.loginPassword
         })
-//        this.$router.push({name: 'UserInfo'})
+        let user_id = this.loginForm.loginUserName
+        this.$router.push({ name: 'UserInfo', params: { id: user_id }})
       } else {
         console.log('Empty fields')
       }
-    }
+    },
+    // async getUserInfo() {
+    //   const user = await PostsService.fetchPosts()
+    //   console.log(user)
+    // }
   }
 }
 </script>

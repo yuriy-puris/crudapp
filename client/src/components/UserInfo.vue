@@ -20,6 +20,7 @@ export default {
     async getUserInfo() {
       const user = await PostsService.fetchPosts()
       this.userInfo.userName = user.data.firstName
+      console.log(user)
     }
   },
   mounted() {

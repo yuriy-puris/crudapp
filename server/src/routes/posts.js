@@ -4,8 +4,11 @@ const User = require('../models/post-model')
 const bcrypt = require('bcrypt-nodejs')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
-
+const mongoose = require('mongoose')
+const ObjectID = require('mongodb').ObjectID
 //create and write to database
+
+let sess
 
 router.post('/userinfo', (req, res) => {
   let { firstName, userEmail, password } = req.body
@@ -22,7 +25,9 @@ router.post('/userinfo', (req, res) => {
       if(err) {
         console.log('hi it si error')
       } else {
-        res.send('signup successful')
+        console.log('signup succesfully')
+        sess = newUser
+        res.redirect('/')
       }
     })
   })
@@ -41,11 +46,8 @@ router.post('/login', (req, res) => {
           userEmail: userData.userEmail,
           _id: userData._id
         }
-        req.session.user.expires = new Date(
-          Date.now() + 3 * 24 * 3600 * 1000
-        )
-        // res.status(200).send({ user: req.session.user })
-        res.redirect('login/' + req.session.user._id)
+        sess = req.session.user
+        res.redirect('/')
       } else {
         console.log('invaild login')
         res.send(401).send('incorrect password')
@@ -57,13 +59,15 @@ router.post('/login', (req, res) => {
   })
 })
 
-router.get('/login/:id', (req, res, next) => {
-  let id = req.params.id
-  User.findById(id, (err, user) => {
+
+router.get('/', (req, res) => {
+  let sess_user_id = sess._id
+  console.log(sess)
+  User.findById(sess_user_id, (err, user) => {
     if(err) {
       console.log(err)
     } else {
-      res.send({ user: user })
+      res.send(user)
     }
   })
 })

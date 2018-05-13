@@ -2,7 +2,7 @@ import Api from '@/services/Api'
 
 export default {
   fetchPosts () {
-    return Api().get('login')
+    return Api().get('/')
   },
   addNewPosts (params) {
     return Api().post('userinfo', params)

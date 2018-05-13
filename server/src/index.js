@@ -17,14 +17,15 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(cors())
 
-app.use(
-  session({
-    secret: "iy98hcbh489n38984y4h498", // don't put this into your code at production.  Try using saving it into environment variable or a config file.
-    resave: true,
-    saveUninitialized: false,
-    store: new MongoStore({ mongooseConnection: mongoose.connection })
+app.use(session({
+  secret: 'i need more beers',
+  resave: false,
+  saveUninitialized: false,
+  // Место хранения можно выбрать из множества вариантов, это и БД и файлы и Memcached.
+  store: new MongoStore({
+    url: 'mongodb://localhost/articles',
   })
-)
+}))
 
 app.use(require('./routes/posts'))
 
