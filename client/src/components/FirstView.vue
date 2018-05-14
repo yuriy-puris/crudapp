@@ -103,7 +103,7 @@ export default {
         await PostsService.addNewPosts({
           firstName: this.signForm.signFirstName,
           userEmail: this.signForm.signUserEmail,
-          password: this.signForm.signPassword
+          password: this.signForm.signPassword,
         })
         let user_id = this.signForm.signFirstName
         console.log(user_id)
@@ -133,7 +133,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
+<style lang="scss">
   h1 {
     text-align:center;
     color: #ffffff;

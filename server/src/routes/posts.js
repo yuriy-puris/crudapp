@@ -11,12 +11,12 @@ const ObjectID = require('mongodb').ObjectID
 let sess
 
 router.post('/userinfo', (req, res) => {
-  let { firstName, userEmail, password } = req.body
+  let { firstName, userEmail, password, tasks } = req.body
 
   let userData = {
     firstName,
     userEmail,
-    password: bcrypt.hashSync(password, bcrypt.genSaltSync(5))
+    password: bcrypt.hashSync(password, bcrypt.genSaltSync(5)),
   }
 
   let newUser = new User(userData)
@@ -29,8 +29,8 @@ router.post('/userinfo', (req, res) => {
         sess = newUser
         res.redirect('/')
       }
-    })
   })
+})
 
 //read data in database
 

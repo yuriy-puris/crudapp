@@ -22,8 +22,8 @@ article, aside, details, figcaption, figure, footer, header, main, nav, section,
   display: block;
 }
 a {
-  text-decoration:underline;
-  color:#000;
+  color: #ffffff;
+  text-decoration:none;
   outline:none;
 }
 a:hover {text-decoration:none;}
@@ -72,6 +72,14 @@ body {
   min-height: 100%;
   height: 100%;
 }
+body {
+  color: #fff;
+  font-size: 14px;
+}
+h1 {
+  color: #ffffff;
+  font-size: 40px;
+}
 #app {
   background-color: #1F2739;
   height: 100%;
@@ -83,3 +91,4 @@ body {
 .guest-holder {
   width: 100%;
 }
+

@@ -10,7 +10,8 @@ const UserSchema = new Schema({
   },
   password: {
     type: String,
-  }
+  },
+  tasks: Array
 })
 
 const UserModel = mongoose.model('userinfo', UserSchema)
