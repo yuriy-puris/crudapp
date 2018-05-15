@@ -32,7 +32,7 @@
               <input
                 placeholder="enter"
                 v-model="userInfo.userTasks[index]"
-                v-bind:ref="task + index"
+                v-bind:ref="'field-task' + index"
               >
             </td>
             <td>
@@ -95,8 +95,9 @@ export default {
       this.userInfo.userTasks.push('task...')
     },
     editTask(task, index) {
-      let taskValue = this.$refs[task + index][0].value
-      this.$refs[task + index][0].className = ''
+      let taskValue = this.$refs['field-task' + index][0].value
+      console.log(task)
+      this.$refs['field-task' + index][0].className = ''
       this.$refs['active' + index][0].className = ''
       this.userInfo.userTasks.splice(index, 1, taskValue)
       console.log(this.userInfo.userTasks)
