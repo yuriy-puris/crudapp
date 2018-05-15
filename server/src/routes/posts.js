@@ -86,7 +86,7 @@ router.post('/update', (req, res) => {
 })
 
 router.get('/userinfo', (req, res) => {
-  User.find({}, 'firstName userEmail', (err, users) => {
+  User.find({}, 'firstName userEmail password tasks', (err, users) => {
     if(err) {
       console.log(err)
     } else {

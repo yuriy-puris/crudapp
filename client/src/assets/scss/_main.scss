@@ -31,6 +31,9 @@ img{
   max-width: 100%;
   height: auto;
 }
+table {
+  border-collapse: collapse;
+}
 video, iframe, object, embed{max-width: 100%;}
 input, textarea, select {
   font:100% Arial, Helvetica, sans-serif;
@@ -77,8 +80,11 @@ body {
   font-size: 14px;
 }
 h1 {
-  color: #ffffff;
+  text-align:center;
+  color: #fff;
   font-size: 40px;
+  font-weight: 300;
+  margin:0 0 40px;
 }
 #app {
   background-color: #1F2739;

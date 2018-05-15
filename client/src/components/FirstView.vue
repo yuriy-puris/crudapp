@@ -124,10 +124,6 @@ export default {
         console.log('Empty fields')
       }
     },
-    // async getUserInfo() {
-    //   const user = await PostsService.fetchPosts()
-    //   console.log(user)
-    // }
   }
 }
 </script>
@@ -186,12 +182,6 @@ export default {
     }
     .tab-content > div:last-child {
       display:none;
-    }
-    h1 {
-      text-align:center;
-      color: #fff;
-      font-weight: 300;
-      margin:0 0 40px;
     }
   }
   input, textarea {

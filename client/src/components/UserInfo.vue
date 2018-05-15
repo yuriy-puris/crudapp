@@ -159,6 +159,7 @@ export default {
     }
   }
   h1 {
+    text-align: left;
     span {
       font-size: 33px;
     }
@@ -195,6 +196,7 @@ export default {
       font-size: 15px;
       line-height: 28px;
       position: relative;
+      margin: 0 3px;
     }
     td {
       padding: 5px 0;
