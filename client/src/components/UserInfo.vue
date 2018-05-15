@@ -20,18 +20,21 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(task, index) in userInfo.userTasks">
+          <tr
+            v-for="(task, index) in userInfo.userTasks"
+            :class="{donetask:task.done == true}"
+          >
             <td class="task-description">
               <p
                 @click="selected = index"
                 :class="{active:selected == index}"
                 v-bind:ref="'active' + index"
               >
-                {{ task }}
+                {{ task.info }}
               </p>
               <input
                 placeholder="enter"
-                v-model="userInfo.userTasks[index]"
+                v-model="userInfo.userTasks[index].info"
                 v-bind:ref="'field-task' + index"
               >
             </td>
@@ -39,13 +42,19 @@
               <a
                 href="#"
                 class="btn btn-edit"
-                @click="editTask(task, index)"
+                @click="editTask(index)"
               >
                 Edit
               </a>
             </td>
             <td>
-              <a href="#" class="btn btn-success">success</a>
+              <a
+                href="#"
+                class="btn btn-success"
+                @click="successTask(index)"
+              >
+                success
+              </a>
             </td>
             <td>
               <a
@@ -92,19 +101,24 @@ export default {
       })
     },
     addTask() {
-      this.userInfo.userTasks.push('task...')
+      this.userInfo.userTasks.push({ info: 'task...', done: false })
     },
-    editTask(task, index) {
+    editTask(index) {
       let taskValue = this.$refs['field-task' + index][0].value
-      console.log(task)
       this.$refs['field-task' + index][0].className = ''
       this.$refs['active' + index][0].className = ''
-      this.userInfo.userTasks.splice(index, 1, taskValue)
+      this.userInfo.userTasks.splice(index, 1, { info: taskValue, done: false })
       console.log(this.userInfo.userTasks)
       this.updateUser()
     },
     deleteTask(index) {
       this.userInfo.userTasks.splice(index, 1)
+      this.updateUser()
+    },
+    successTask(index) {
+      let taskValue = this.$refs['field-task' + index][0].value
+      this.userInfo.userTasks.splice(index, 1, { info: taskValue, done: true })
+      console.log(this.userInfo.userTasks)
       this.updateUser()
     }
   },
@@ -115,6 +129,11 @@ export default {
 </script>
 
 <style lang="scss">
+  .donetask {
+    p {
+      text-decoration: line-through;
+    }
+  }
   .task-description {
     width: 90%;
     input {
