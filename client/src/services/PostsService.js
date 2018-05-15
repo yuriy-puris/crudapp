@@ -9,5 +9,8 @@ export default {
   },
   loginUser (params) {
     return Api().post('login', params)
+  },
+  updateInfo(params) {
+    return Api().post('update', params)
   }
 }

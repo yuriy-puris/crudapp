@@ -25,13 +25,14 @@
               <p
                 @click="selected = index"
                 :class="{active:selected == index}"
-                v-bind:ref="task + index"
+                v-bind:ref="'active' + index"
               >
                 {{ task }}
               </p>
               <input
                 placeholder="enter"
                 v-model="userInfo.userTasks[index]"
+                v-bind:ref="task + index"
               >
             </td>
             <td>
@@ -73,14 +74,26 @@ export default {
     async getUserInfo() {
       const user = await PostsService.fetchPosts()
       this.userInfo.userName = user.data.firstName
-//      this.userInfo.userTasks = user.data.tasks
-      console.log(user)
+      if( user.data.tasks ) {
+        this.userInfo.userTasks = user.data.tasks
+      }
+      console.log(this.userInfo.userTasks)
+    },
+    async updateUser() {
+      await PostsService.updateInfo({
+        tasks: this.userInfo.userTasks
+      })
     },
     addTask() {
-      this.userInfo.userTasks.push('task')
+      this.userInfo.userTasks.push('task...')
     },
     editTask(task, index) {
-      this.$refs[task + index][0]
+      let taskValue = this.$refs[task + index][0].value
+      this.$refs[task + index][0].className = ''
+      this.$refs['active' + index][0].className = ''
+      this.userInfo.userTasks.splice(index, 1, taskValue)
+      console.log(this.userInfo.userTasks)
+      this.updateUser()
     }
   },
   mounted() {
