@@ -39,7 +39,8 @@
               <a
                 href="#"
                 class="btn btn-edit"
-                @click="editTask(task, index)">
+                @click="editTask(task, index)"
+              >
                 Edit
               </a>
             </td>
@@ -47,7 +48,13 @@
               <a href="#" class="btn btn-success">success</a>
             </td>
             <td>
-              <a href="#" class="btn btn-remove">done</a>
+              <a
+                href="#"
+                class="btn btn-remove"
+                @click="deleteTask(index)"
+              >
+                remove
+              </a>
             </td>
           </tr>
         </tbody>
@@ -93,6 +100,10 @@ export default {
       this.$refs['active' + index][0].className = ''
       this.userInfo.userTasks.splice(index, 1, taskValue)
       console.log(this.userInfo.userTasks)
+      this.updateUser()
+    },
+    deleteTask(index) {
+      this.userInfo.userTasks.splice(index, 1)
       this.updateUser()
     }
   },
