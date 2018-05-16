@@ -1,21 +1,34 @@
 <template>
   <div class="user-holder">
     <h1><span>Hello</span>, {{userInfo.userName}}</h1>
-    <div class="tasks-box">
+    <div
+      class="tasks-box"
+      v-for="(task_head, index) in userInfo.userTasksHead"
+    >
       <table>
         <thead>
           <tr>
-            <th colspan="1">Tasks head</th>
-            <th
-              colspan="3"
-            >
-              <a
-                href="#"
+            <th colspan="1">
+              <span
+                v-on:click="selectedHead()"
+                v-bind:class="{ active: selectHead }"
+                v-bind:ref="'text-head' + index"
+              >
+                {{ task_head }}
+              </span>
+              <input
+                v-model="userInfo.userTasksHead[index]"
+                v-bind:ref="'field-head' + index"
+                @keyup.enter="hiddenField(index)"
+              >
+            </th>
+            <th colspan="3">
+              <button
                 class="btn btn-add"
                 @click="addTask()"
               >
                 Add task
-              </a>
+              </button>
             </th>
           </tr>
         </thead>
@@ -26,7 +39,7 @@
           >
             <td class="task-description">
               <p
-                @click="selected = index"
+                @click="[selected = index, openEdit(index)]"
                 :class="{active:selected == index}"
                 v-bind:ref="'active' + index"
               >
@@ -39,31 +52,36 @@
               >
             </td>
             <td>
-              <a
-                href="#"
+              <button
                 class="btn btn-edit"
                 @click="editTask(index)"
+                v-bind:ref="['btn-edit' + index]"
+                :disabled="disable"
               >
                 Edit
-              </a>
+              </button>
             </td>
             <td>
-              <a
-                href="#"
-                class="btn btn-success"
+              <button
+                :class="['btn', 'btn-success']"
                 @click="successTask(index)"
               >
                 success
-              </a>
+              </button>
+              <button
+                :class="['btn', 'btn-reopen' ]"
+                @click="reopenTask(index)"
+              >
+                success
+              </button>
             </td>
             <td>
-              <a
-                href="#"
+              <button
                 class="btn btn-remove"
                 @click="deleteTask(index)"
               >
                 remove
-              </a>
+              </button>
             </td>
           </tr>
         </tbody>
@@ -79,10 +97,13 @@ export default {
   name: 'UserInfo',
   data() {
     return {
+      selectHead: false,
       selected: undefined,
+      disable: true,
       userInfo: {
         userName: '',
-        userTasks: []
+        userTasks: [],
+        userTasksHead: []
       }
     }
   },
@@ -90,6 +111,7 @@ export default {
     async getUserInfo() {
       const user = await PostsService.fetchPosts()
       this.userInfo.userName = user.data.firstName
+      this.userInfo.userTasksHead = user.data.tasks_head
       if( user.data.tasks ) {
         this.userInfo.userTasks = user.data.tasks
       }
@@ -97,6 +119,7 @@ export default {
     },
     async updateUser() {
       await PostsService.updateInfo({
+        tasksHead: this.userInfo.userTasksHead,
         tasks: this.userInfo.userTasks
       })
     },
@@ -120,6 +143,20 @@ export default {
       this.userInfo.userTasks.splice(index, 1, { info: taskValue, done: true })
       console.log(this.userInfo.userTasks)
       this.updateUser()
+    },
+    hiddenField(index) {
+      let taskHeadValue = this.$refs['field-head' + index][0].value
+      this.$refs['field-head' + index][0].className = ''
+      this.$refs['text-head' + index][0].className = ''
+      this.userInfo.userTasksHead.splice(index, 1, taskHeadValue)
+      this.selectHead = !this.selectHead
+      this.updateUser()
+    },
+    selectedHead() {
+      this.selectHead = !this.selectHead
+    },
+    openEdit(index) {
+      this.$refs['btn-edit' + index][0].disabled = !this.disable
     }
   },
   mounted() {
@@ -134,12 +171,14 @@ export default {
       text-decoration: line-through;
     }
   }
-  .task-description {
+  .task-description,
+  .tasks-box {
     width: 90%;
     input {
       display: none;
     }
-    p {
+    p,
+    span {
       &.active {
         display: none;
         & + input {
@@ -193,10 +232,12 @@ export default {
       overflow: hidden;
       background: #fff;
       border-radius: 5px;
+      border-color: transparent;
       font-size: 15px;
       line-height: 28px;
       position: relative;
       margin: 0 3px;
+      outline: none;
     }
     td {
       padding: 5px 0;

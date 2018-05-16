@@ -76,9 +76,10 @@ router.get('/', (req, res) => {
 
 router.post('/update', (req, res) => {
   let tasks = req.body.tasks
+  let tasks_head = req.body.tasksHead
   let sess_user_id = sess._id
   console.log('Hello, it si new task:' + tasks)
-  User.findByIdAndUpdate(sess_user_id, {tasks: tasks}, (err, user) => {
+  User.findByIdAndUpdate(sess_user_id, { tasks_head: tasks_head, tasks: tasks }, (err, user) => {
     if(err) return console.log(err)
     res.redirect('/')
     console.log('Update object user:', user)
@@ -86,7 +87,7 @@ router.post('/update', (req, res) => {
 })
 
 router.get('/userinfo', (req, res) => {
-  User.find({}, 'firstName userEmail password tasks', (err, users) => {
+  User.find({}, 'firstName userEmail password tasks_head tasks', (err, users) => {
     if(err) {
       console.log(err)
     } else {

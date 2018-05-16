@@ -11,7 +11,11 @@ const UserSchema = new Schema({
   password: {
     type: String,
   },
-  tasks: Array
+  tasks_head: {
+    type: Array,
+    default: 'My Tasks'
+  },
+  tasks: Array,
 })
 
 const UserModel = mongoose.model('userinfo', UserSchema)

@@ -12,5 +12,5 @@ export default {
   },
   updateInfo(params) {
     return Api().post('update', params)
-  }
+  },
 }
