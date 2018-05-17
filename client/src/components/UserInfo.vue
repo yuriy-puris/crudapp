@@ -10,7 +10,7 @@
           <tr>
             <th colspan="1">
               <span
-                v-on:click="selectedHead()"
+                v-on:click="selectedHead(index)"
                 v-bind:class="{ active: selectHead }"
                 v-bind:ref="'text-head' + index"
               >
@@ -32,10 +32,14 @@
             </th>
           </tr>
         </thead>
-        <tbody>
+        <transition-group
+          name="list-complete"
+          tag="tbody"
+        >
           <tr
             v-for="(task, index) in userInfo.userTasks"
-            :class="{donetask:task.done == true}"
+            :class="[task.done ? 'donetask' : '', 'list-complete-item']"
+            :key="index"
           >
             <td class="task-description">
               <p
@@ -72,7 +76,7 @@
                 :class="['btn', 'btn-reopen' ]"
                 @click="reopenTask(index)"
               >
-                success
+                reopen
               </button>
             </td>
             <td>
@@ -84,7 +88,7 @@
               </button>
             </td>
           </tr>
-        </tbody>
+        </transition-group>
       </table>
     </div>
   </div>
@@ -131,7 +135,7 @@ export default {
       this.$refs['field-task' + index][0].className = ''
       this.$refs['active' + index][0].className = ''
       this.userInfo.userTasks.splice(index, 1, { info: taskValue, done: false })
-      console.log(this.userInfo.userTasks)
+      this.$refs['field-task' + index][0].autofocus = false
       this.updateUser()
     },
     deleteTask(index) {
@@ -141,6 +145,11 @@ export default {
     successTask(index) {
       let taskValue = this.$refs['field-task' + index][0].value
       this.userInfo.userTasks.splice(index, 1, { info: taskValue, done: true })
+      this.updateUser()
+    },
+    reopenTask(index) {
+      let taskValue = this.$refs['field-task' + index][0].value
+      this.userInfo.userTasks.splice(index, 1, { info: taskValue, done: false })
       console.log(this.userInfo.userTasks)
       this.updateUser()
     },
@@ -152,10 +161,13 @@ export default {
       this.selectHead = !this.selectHead
       this.updateUser()
     },
-    selectedHead() {
+    selectedHead(index) {
       this.selectHead = !this.selectHead
+      this.$refs['field-head' + index][0].autofocus = true
     },
     openEdit(index) {
+      this.$refs['field-task' + index][0].autofocus = true
+      console.log(this.$refs['field-task' + index])
       this.$refs['btn-edit' + index][0].disabled = !this.disable
     }
   },
@@ -166,14 +178,24 @@ export default {
 </script>
 
 <style lang="scss">
-  .donetask {
-    p {
-      text-decoration: line-through;
-    }
+  .list-complete-item {
+    transition: all 1s;
+    width: 100%;
+    margin: 0;
+  }
+  .list-complete-enter, .list-complete-leave-to {
+    opacity: 0;
+    transform: translateY(10px);
   }
   .task-description,
   .tasks-box {
+    color: #fff;
     width: 90%;
+    thead {
+      span {
+        cursor: pointer;
+      }
+    }
     input {
       display: none;
     }
@@ -186,6 +208,10 @@ export default {
         }
       }
     }
+    p {
+      cursor: pointer;
+      margin: 0;
+    }
   }
   .user-holder {
     width: 100%;
@@ -195,6 +221,7 @@ export default {
     align-self: flex-start;
     table {
       width: 100%;
+      margin: 0;
     }
   }
   h1 {
@@ -206,22 +233,22 @@ export default {
   .tasks-box {
     color: #333;
     font-size: 20px;
-    max-width: 400px;
+    max-width: 520px;
     background: #4e5a76;
     border-radius: 15px;
-    padding: 15px;
+    padding: 15px 20px;
     text-align: left;
     thead {
       font-size: 25px;
-      padding: 0 0 15px;
     }
     th {
-      color: #d4d4d4;
+      color: #a3f1ff;
       border-bottom: 1px solid #d4d4d4;
-      padding: 0 0 10px;
+      padding: 0 0 15px;
       width: 100%;
       &:first-child {
         width: 70%;
+        min-width: 350px;
       }
     }
     .btn {
@@ -240,23 +267,29 @@ export default {
       outline: none;
     }
     td {
-      padding: 5px 0;
-      vertical-align: top;
+      padding: 15px 0 5px;
+      vertical-align: middle;
     }
     input {
       height: 30px;
       border-radius: 5px;
       border: none;
       outline: none;
-      padding: 5px;
+      padding: 0;
+      background: transparent;
+      font: inherit;
+      color: inherit;
     }
   }
   .btn {
     &.btn-add {
-      color: #333;
+      color: #fff;
       width: 100%;
       text-indent: 0;
       text-align: center;
+      background: #3da3bb;
+      box-shadow: 5px 6px 12px -1px rgba(0,0,0, .1);
+      margin: 0;
     }
     &.btn-edit {
       text-indent: 0;
@@ -264,7 +297,41 @@ export default {
       color: #6f5757;
       padding: 0 8px;
     }
+    &.btn-reopen {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 1s;
+      position: absolute;
+      &::before {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-width: 2px;
+        border-style: solid;
+        border-color: #31c5e0 #31c5e0 #31c5e0 #fff;
+        border-radius: 50%;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%) rotateZ(6deg);
+      }
+      &::after {
+        content: '';
+        position: absolute;
+        height: 0;
+        width: 0;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-bottom: 7px solid #31c5e0;
+        left: 3px;
+        top: 14px;
+        transform: rotateZ(-26deg);
+      }
+    }
     &.btn-success {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 1s;
       &::after {
         content: '';
         position: absolute;
@@ -296,6 +363,23 @@ export default {
       }
     }
   }
+  .donetask {
+    p {
+      cursor: auto;
+      text-decoration: line-through;
+      pointer-events: none;
+    }
+    .btn-success {
+      opacity: 0;
+      visibility: hidden;
+      position: absolute;
+    }
+    .btn-reopen {
+      opacity: 1;
+      visibility: visible;
+      position: relative;
+    }
+  }
   .user-list {
     width: 80%;
     table {
@@ -305,8 +389,6 @@ export default {
       margin: 0 auto;
       display: table;
       color: #A7A1AE;
-    }
-    th {
     }
     tr {
       &:nth-child(odd) {
