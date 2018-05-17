@@ -231,10 +231,11 @@ export default {
     }
   }
   .tasks-box {
+    box-shadow: 0 10px 30px 0 rgba(0,0,0, 0.2);
+    background: #4e5a76;
     color: #333;
     font-size: 20px;
     max-width: 520px;
-    background: #4e5a76;
     border-radius: 15px;
     padding: 15px 20px;
     text-align: left;
