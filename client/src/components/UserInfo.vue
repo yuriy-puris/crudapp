@@ -1,113 +1,36 @@
 <template>
   <div class="user-holder">
-    <h1><span>Hello</span>, {{userInfo.userName}}</h1>
-    <div
-      class="tasks-box"
-      v-for="(task_head, index) in userInfo.userTasksHead"
+    <h1><span></span> {{userInfo.userName}}</h1>
+    <button
+      class="btn add-box"
+      @click="addTasksBox()"
     >
-      <table>
-        <thead>
-          <tr>
-            <th colspan="1">
-              <span
-                v-on:click="selectedHead(index)"
-                v-bind:class="{ active: selectHead }"
-                v-bind:ref="'text-head' + index"
-              >
-                {{ task_head }}
-              </span>
-              <input
-                v-model="userInfo.userTasksHead[index]"
-                v-bind:ref="'field-head' + index"
-                @keyup.enter="hiddenField(index)"
-              >
-            </th>
-            <th colspan="3">
-              <button
-                class="btn btn-add"
-                @click="addTask()"
-              >
-                Add task
-              </button>
-            </th>
-          </tr>
-        </thead>
-        <transition-group
-          name="list-complete"
-          tag="tbody"
-        >
-          <tr
-            v-for="(task, index) in userInfo.userTasks"
-            :class="[task.done ? 'donetask' : '', 'list-complete-item']"
-            :key="index"
-          >
-            <td class="task-description">
-              <p
-                @click="[selected = index, openEdit(index)]"
-                :class="{active:selected == index}"
-                v-bind:ref="'active' + index"
-              >
-                {{ task.info }}
-              </p>
-              <input
-                placeholder="enter"
-                v-model="userInfo.userTasks[index].info"
-                v-bind:ref="'field-task' + index"
-              >
-            </td>
-            <td>
-              <button
-                class="btn btn-edit"
-                @click="editTask(index)"
-                v-bind:ref="['btn-edit' + index]"
-                :disabled="disable"
-              >
-                Edit
-              </button>
-            </td>
-            <td>
-              <button
-                :class="['btn', 'btn-success']"
-                @click="successTask(index)"
-              >
-                success
-              </button>
-              <button
-                :class="['btn', 'btn-reopen' ]"
-                @click="reopenTask(index)"
-              >
-                reopen
-              </button>
-            </td>
-            <td>
-              <button
-                class="btn btn-remove"
-                @click="deleteTask(index)"
-              >
-                remove
-              </button>
-            </td>
-          </tr>
-        </transition-group>
-      </table>
-    </div>
+      Add Box
+    </button>
+
+    <UserTasksBox
+      v-for="(tasks_box, index) in userInfo.userTasks"
+      v-bind:taskbox="tasks_box"
+      v-bind:indexComponent="index"
+    />
+
   </div>
 </template>
 
 <script>
 import PostsService from '@/services/PostsService'
+import UserTasksBox from '@/components/UserTasksBox'
 
 export default {
   name: 'UserInfo',
+  components: {
+    UserTasksBox
+  },
   data() {
     return {
-      selectHead: false,
-      selected: undefined,
-      disable: true,
       userInfo: {
         userName: '',
         userTasks: [],
-        userTasksHead: []
       }
     }
   },
@@ -115,60 +38,18 @@ export default {
     async getUserInfo() {
       const user = await PostsService.fetchPosts()
       this.userInfo.userName = user.data.firstName
-      this.userInfo.userTasksHead = user.data.tasks_head
       if( user.data.tasks ) {
         this.userInfo.userTasks = user.data.tasks
       }
       console.log(this.userInfo.userTasks)
     },
-    async updateUser() {
-      await PostsService.updateInfo({
-        tasksHead: this.userInfo.userTasksHead,
-        tasks: this.userInfo.userTasks
-      })
-    },
-    addTask() {
-      this.userInfo.userTasks.push({ info: 'task...', done: false })
-    },
-    editTask(index) {
-      let taskValue = this.$refs['field-task' + index][0].value
-      this.$refs['field-task' + index][0].className = ''
-      this.$refs['active' + index][0].className = ''
-      this.userInfo.userTasks.splice(index, 1, { info: taskValue, done: false })
-      this.$refs['field-task' + index][0].autofocus = false
-      this.updateUser()
-    },
-    deleteTask(index) {
-      this.userInfo.userTasks.splice(index, 1)
-      this.updateUser()
-    },
-    successTask(index) {
-      let taskValue = this.$refs['field-task' + index][0].value
-      this.userInfo.userTasks.splice(index, 1, { info: taskValue, done: true })
-      this.updateUser()
-    },
-    reopenTask(index) {
-      let taskValue = this.$refs['field-task' + index][0].value
-      this.userInfo.userTasks.splice(index, 1, { info: taskValue, done: false })
-      console.log(this.userInfo.userTasks)
-      this.updateUser()
-    },
-    hiddenField(index) {
-      let taskHeadValue = this.$refs['field-head' + index][0].value
-      this.$refs['field-head' + index][0].className = ''
-      this.$refs['text-head' + index][0].className = ''
-      this.userInfo.userTasksHead.splice(index, 1, taskHeadValue)
-      this.selectHead = !this.selectHead
-      this.updateUser()
-    },
-    selectedHead(index) {
-      this.selectHead = !this.selectHead
-      this.$refs['field-head' + index][0].autofocus = true
-    },
-    openEdit(index) {
-      this.$refs['field-task' + index][0].autofocus = true
-      console.log(this.$refs['field-task' + index])
-      this.$refs['btn-edit' + index][0].disabled = !this.disable
+    addTasksBox() {
+      this.userInfo.userTasks.push(
+        {
+          taskBoxHead: 'New tasks',
+          tasksBoxCell: []
+        }
+      )
     }
   },
   mounted() {
@@ -178,6 +59,19 @@ export default {
 </script>
 
 <style lang="scss">
+  .btn {
+    padding: 10px 25px;
+    outline: none;
+    border-color: transparent;
+    border-radius: 5px;
+    &.add-box {
+      background: #0094af;
+      color: #fff;
+      font-size: 16px;
+      box-shadow: 5px 6px 12px -1px rgba(0, 0, 0, 0.1);
+      float: right;
+    }
+  }
   .list-complete-item {
     transition: all 1s;
     width: 100%;
@@ -239,6 +133,7 @@ export default {
     border-radius: 15px;
     padding: 15px 20px;
     text-align: left;
+    margin: 0 0 50px;
     thead {
       font-size: 25px;
     }
@@ -265,6 +160,7 @@ export default {
       line-height: 28px;
       position: relative;
       margin: 0 3px;
+      padding: 0;
       outline: none;
     }
     td {

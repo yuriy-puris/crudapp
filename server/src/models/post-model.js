@@ -11,10 +11,6 @@ const UserSchema = new Schema({
   password: {
     type: String,
   },
-  tasks_head: {
-    type: Array,
-    default: 'My Tasks'
-  },
   tasks: Array,
 })
 
