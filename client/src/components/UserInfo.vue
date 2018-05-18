@@ -364,11 +364,30 @@ export default {
       }
     }
   }
+  .task-description {
+    p {
+      position: relative;
+      margin: 0 20px 0 0;
+      display: inline-block;
+      &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        height: 1px;
+        width: 0;
+        background: #fff;
+        transition: width 1s;
+      }
+    }
+  }
   .donetask {
     p {
       cursor: auto;
-      text-decoration: line-through;
       pointer-events: none;
+      &::after {
+        width: 100%;
+      }
     }
     .btn-success {
       opacity: 0;
