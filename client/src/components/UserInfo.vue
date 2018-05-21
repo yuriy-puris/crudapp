@@ -1,6 +1,6 @@
 <template>
   <div class="user-holder">
-    <h1><span></span> {{userInfo.userName}}</h1>
+    <h1>{{userInformation.firstName}}</h1>
     <button
       class="btn add-box"
       @click="addTasksBox()"
@@ -9,15 +9,17 @@
     </button>
 
     <UserTasksBox
-      v-for="(tasks_box, index) in userInfo.userTasks"
+      v-for="(tasks_box, index) in userInformation.userTasks"
       v-bind:taskbox="tasks_box"
       v-bind:indexComponent="index"
+      :key="index"
     />
 
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import PostsService from '@/services/PostsService'
 import UserTasksBox from '@/components/UserTasksBox'
 
@@ -28,23 +30,35 @@ export default {
   },
   data() {
     return {
-      userInfo: {
-        userName: '',
-        userTasks: [],
+      userInformation: {
+        firstName: '',
+        userTasks: []
       }
     }
   },
+  watch: {
+    'userInfo': function() {
+      this.userInformation.firstName = this.userInfo.data.firstName
+      this.userInformation.userTasks = this.userInfo.data.tasks
+    }
+  },
+  computed: {
+    ...mapState([
+      'userInfo'
+    ])
+  },
+  created() {
+    this.getUserInfo()
+  },
+  mounted() {
+    this.getUserInfo()
+  },
   methods: {
-    async getUserInfo() {
-      const user = await PostsService.fetchPosts()
-      this.userInfo.userName = user.data.firstName
-      if( user.data.tasks ) {
-        this.userInfo.userTasks = user.data.tasks
-      }
-      console.log(this.userInfo.userTasks)
+    getUserInfo() {
+      this.$store.dispatch('LOAD_USER_INFO')
     },
     addTasksBox() {
-      this.userInfo.userTasks.push(
+      this.userInformation.userTasks.push(
         {
           taskBoxHead: 'New tasks',
           tasksBoxCell: []
@@ -52,9 +66,6 @@ export default {
       )
     }
   },
-  mounted() {
-    this.getUserInfo()
-  }
 }
 </script>
 

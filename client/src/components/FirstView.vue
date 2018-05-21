@@ -106,7 +106,6 @@ export default {
           password: this.signForm.signPassword,
         })
         let user_id = this.signForm.signFirstName
-        console.log(user_id)
         this.$router.push({ name: 'UserInfo', params: { id: user_id }})
       } else {
         console.log('Empty fields')

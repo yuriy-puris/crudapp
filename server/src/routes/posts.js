@@ -62,11 +62,11 @@ router.post('/login', (req, res) => {
 
 router.get('/', (req, res) => {
   let sess_user_id = sess._id
-  console.log(sess)
   User.findById(sess_user_id, (err, user) => {
-    if(err) {
+    if (err) {
       console.log(err)
     } else {
+      console.log('this is :'+ user)
       res.send(user)
     }
   })

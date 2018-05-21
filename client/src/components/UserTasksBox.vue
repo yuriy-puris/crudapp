@@ -93,6 +93,7 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
   import PostsService from '@/services/PostsService'
 
   export default {
@@ -117,7 +118,7 @@
       },
       addTask() {
         this.userInfoBox.userTasksBox.tasksBoxCell.push({ info: 'task...', done: false })
-        console.log(this.userInfoBox.userTasksBox);
+//        console.log(this.userInfoBox.userTasksBox);
       },
       editTask(index) {
         let taskValue = this.$refs['field-task' + index][0].value
@@ -125,22 +126,24 @@
         this.$refs['active' + index][0].className = ''
         this.userInfoBox.userTasksBox.tasksBoxCell.splice(index, 1, { info: taskValue, done: false })
         this.$refs['field-task' + index][0].autofocus = false
-        this.updateUser()
+        if(this.userInfoBox.userTasksBox.tasksBoxCell.length >= 1) {
+          console.log(1)
+          this.updateStore(this.userInfoBox.userTasksBox, this.indexComponent)
+        }
       },
       deleteTask(index) {
         this.userInfoBox.userTasksBox.tasksBoxCell.splice(index, 1)
-        this.updateUser()
+        this.updateStore(this.userInfoBox.userTasksBox, this.indexComponent)
       },
       successTask(index) {
         let taskValue = this.$refs['field-task' + index][0].value
         this.userInfoBox.userTasksBox.tasksBoxCell.splice(index, 1, { info: taskValue, done: true })
-        this.updateUser()
+        this.updateStore(this.userInfoBox.userTasksBox, this.indexComponent)
       },
       reopenTask(index) {
         let taskValue = this.$refs['field-task' + index][0].value
         this.userInfoBox.userTasksBox.tasksBoxCell.splice(index, 1, { info: taskValue, done: false })
-        console.log(this.userInfo.userTasksBox)
-        this.updateUser()
+        this.updateStore(this.userInfoBox.userTasksBox, this.indexComponent)
       },
       hiddenField() {
         let taskHeadValue = this.$refs.fieldhead.value
@@ -159,7 +162,14 @@
       },
       getInfoBox() {
         this.userInfoBox.userTasksBox = this.taskbox
-        console.log(this.userInfoBox.userTasksBox)
+//        console.log(this.userInfoBox.userTasksBox)
+      },
+      updateStore(param, index) {
+        let userData = {
+          prm: param,
+          idx: index
+        }
+        this.$store.dispatch('UPDATE_USER_INFO', userData)
       }
     },
     mounted() {
