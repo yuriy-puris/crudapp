@@ -127,7 +127,6 @@
         this.userInfoBox.userTasksBox.tasksBoxCell.splice(index, 1, { info: taskValue, done: false })
         this.$refs['field-task' + index][0].autofocus = false
         if(this.userInfoBox.userTasksBox.tasksBoxCell.length >= 1) {
-          console.log(1)
           this.updateStore(this.userInfoBox.userTasksBox, this.indexComponent)
         }
       },
@@ -150,7 +149,9 @@
         this.$refs.texthead.className = ''
         this.userInfoBox.userTasksBox.taskBoxHead = taskHeadValue
         this.selectHead = !this.selectHead
-        this.updateUser()
+        if(this.userInfoBox.userTasksBox.tasksBoxCell.length >= 1) {
+          this.updateStore(this.userInfoBox.userTasksBox, this.indexComponent)
+        }
       },
       selectedHead() {
         this.selectHead = !this.selectHead

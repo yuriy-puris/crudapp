@@ -19,7 +19,6 @@ const store = new Vuex.Store({
   mutations: {
     SET_USER_INFO: (state, { userInfo }) => {
       state.userInfo = userInfo
-      console.log(state.userInfo)
     },
     UPDATE_USER_INFO: (state, { updateInfo }) => {
       state.userInfo.data.tasks.splice(updateInfo.idx, 1, updateInfo.prm)
