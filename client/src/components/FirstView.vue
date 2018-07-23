@@ -35,6 +35,9 @@
               <input type="password" v-model="signForm.signPassword" class="form-control" placeholder="Password" />
             </div>
             <div class="form-row">
+              <input type="password" v-model="testfield" class="form-control" placeholder="Password" />
+            </div>
+            <div class="form-row">
               <button
                 type="button"
                 class="button button-block"
@@ -69,6 +72,7 @@
 
       </div><!-- tab-content -->
     </div>
+    <div>{{testfield}}</div>
   </div>
 </template>
 
@@ -88,6 +92,16 @@ export default {
       loginForm: {
         loginUserName: '',
         loginPassword: ''
+      }
+    }
+  },
+  computed: {
+    testfield: {
+      get: function(){
+        return this.$store.state.testfield
+      },
+      set: function(newValue) {
+        this.$store.dispatch('CHANGE_TEXT_FIELD', newValue)
       }
     }
   },
